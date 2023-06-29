@@ -1,7 +1,7 @@
 #!/bin/bash
 
 cat > index.html <<EOF
-<h1>${server_text}</h1>
+<h1>${server_text} (version 2)</h1>
 <p>------------</p>
 <p>DB address: ${db_address}</p>
 <p>------------</p>
