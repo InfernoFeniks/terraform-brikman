@@ -21,18 +21,20 @@ variable "cluster_name" {
 variable "db_address" {
   description = "Connect to the database at this endpoint"
   type        = string
+  default = "unknown db address"
 }
 
 variable "db_port" {
   description = "The port the database is listening on"
   type        = string
+  default = "unknown db port"
 }
 
 variable "server_text" {
   description = "The text the web server should return"
-  default     = "Hello, World"
   type        = string
-}
+  default     = "Hello, World"
+  }
 
 variable "server_port" {
   description = "The port the server will use for HTTP requests"
