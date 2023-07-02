@@ -1,3 +1,7 @@
+terraform {
+required_version = "= 1.4.6"
+}
+
 resource "aws_alb_target_group" "asg" {
   name     = "hello-world-${var.environment}"
   port     = var.server_port
