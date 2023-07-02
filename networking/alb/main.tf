@@ -1,27 +1,7 @@
-#ALB
-data "aws_vpc" "default" {
-  default = true
-}
-
-data "aws_subnets" "default" {
-  filter {
-    name   = "vpc-id"
-    values = [data.aws_vpc.default.id]
-  }
-}
-
-locals {
-  http_port = 80
-  tcp_protocol = "tcp"
-  any_port = 0
-  any_protocol = "-1"
-  all_ips = ["0.0.0.0/0"]
-}
-
 resource "aws_alb" "example" {
   name               = var.alb_name
   load_balancer_type = "application"
-  subnets            = data.aws_subnets.default.ids
+  subnets = var.subnet_ids
   security_groups    = [aws_security_group.alb.id]
 }
 
@@ -41,6 +21,14 @@ resource "aws_alb_listener" "http" {
 }
 
 #SG
+
+locals {
+  http_port = 80
+  tcp_protocol = "tcp"
+  any_port = 0
+  any_protocol = "-1"
+  all_ips = ["0.0.0.0/0"]
+}
 
 resource "aws_security_group" "alb" {
   name = var.alb_name

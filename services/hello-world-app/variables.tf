@@ -74,7 +74,12 @@ variable "custom_tags" {
   default     = {}
 }
 
-# variable "subnet_ids" {
-#   description = "Subnet zone"
-#   type        = string
-# }
+variable "subnet_ids" {
+  description = "The subnet IDs to deploy to"
+  type        = list(string)
+}
+
+variable "vpc_id" {
+  description = "The vpc ID to deploy to"
+  type        = string
+}

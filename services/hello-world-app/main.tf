@@ -1,19 +1,8 @@
-data "aws_vpc" "default" {
-  default = true
-}
-
-data "aws_subnets" "default" {
-  filter {
-    name   = "vpc-id"
-    values = [data.aws_vpc.default.id]
-  }
-}
-
 resource "aws_alb_target_group" "asg" {
   name     = "hello-world-${var.environment}"
   port     = var.server_port
   protocol = "HTTP"
-  vpc_id   = data.aws_vpc.default.id
+  vpc_id = var.vpc_id
 
   health_check {
     path                = "/"
@@ -29,12 +18,10 @@ resource "aws_alb_target_group" "asg" {
 resource "aws_alb_listener_rule" "asg" {
   listener_arn = module.alb.alb_http_listener_arn
   priority     = 100
-
   action {
     type             = "forward"
     target_group_arn = aws_alb_target_group.asg.arn
   }
-
   condition {
     path_pattern {
       values = ["*"]
@@ -65,20 +52,21 @@ data "template_file" "user_data" {
 
 module "asg" {
   source = "../../cluster/asg-rolling-deploy"
-  cluster_name  = "hello-world-${var.environment}"
+  cluster_name  = "APP-${var.environment}"
   ami = var.ami
   user_data = data.template_file.user_data.rendered
   instance_type = var.instance_type
   min_size = var.min_size
   max_size = var.max_size
   enable_autoscaling = var.enable_autoscaling
-  subnet_ids = data.aws_subnets.default.ids
   target_group_arns = [aws_alb_target_group.asg.arn]
   health_check_type = "ELB"
   custom_tags = var.custom_tags
+  subnet_ids = var.subnet_ids
 }
 
 module "alb" {
   source = "../../networking/alb"
-  alb_name = "hello-world-${var.environment}"
+  alb_name = "APP-${var.environment}"
+  subnet_ids = var.subnet_ids
 }
