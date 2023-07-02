@@ -3,7 +3,7 @@ required_version = "= 1.4.6"
 }
 
 resource "aws_alb_target_group" "asg" {
-  name     = "hello-world-${var.environment}"
+  name     = "${var.task_name}-${var.environment}"
   port     = var.server_port
   protocol = "HTTP"
   vpc_id = var.vpc_id
@@ -56,7 +56,7 @@ data "template_file" "user_data" {
 
 module "asg" {
   source = "../../cluster/asg-rolling-deploy"
-  cluster_name  = "APP-${var.environment}"
+  cluster_name  = "${var.task_name}-${var.environment}"
   ami = var.ami
   user_data = data.template_file.user_data.rendered
   instance_type = var.instance_type
@@ -71,6 +71,6 @@ module "asg" {
 
 module "alb" {
   source = "../../networking/alb"
-  alb_name = "APP-${var.environment}"
+  alb_name = "${var.task_name}-${var.environment}"
   subnet_ids = var.subnet_ids
 }

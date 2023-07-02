@@ -18,6 +18,11 @@ variable "cluster_name" {
   type        = string
 }
 
+variable "task_name" {
+  description = "The name to use for all app resources"
+  type        = string
+}
+
 variable "db_address" {
   description = "Connect to the database at this endpoint"
   type        = string
