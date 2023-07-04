@@ -1,3 +1,13 @@
+terraform {
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = "~> 5.0"
+    }
+  }
+  required_version = ">= 1.4.0"
+}
+
 locals {
   tcp_protocol = "tcp"
   all_ips      = ["0.0.0.0/0"]
@@ -10,7 +20,6 @@ resource "aws_launch_configuration" "example" {
   security_groups = [aws_security_group.instance.id]
   user_data = var.user_data
   #user_data       = (length(data.template_file.user_data[*]) > 0 ? data.template_file.user_data[0].rendered : data.template_file.user_data_new[0].rendered)
-  #user_data = data.template_file.user_data.rendered
   lifecycle {
     create_before_destroy = true
   }
@@ -23,7 +32,7 @@ resource "aws_autoscaling_group" "example" {
   target_group_arns    = var.target_group_arns
   health_check_type    = var.health_check_type
 
-  desired_capacity = 2
+  desired_capacity = var.desired_capacity
   min_size         = var.min_size
   max_size         = var.max_size
 

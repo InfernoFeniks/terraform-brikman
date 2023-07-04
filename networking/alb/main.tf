@@ -1,3 +1,13 @@
+terraform {
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = "~> 5.0"
+    }
+  }
+  required_version = ">= 1.4.0"
+}
+
 resource "aws_alb" "example" {
   name               = var.alb_name
   load_balancer_type = "application"

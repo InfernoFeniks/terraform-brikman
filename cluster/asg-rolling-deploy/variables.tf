@@ -25,6 +25,12 @@ variable "max_size" {
   type        = number
 }
 
+variable "desired_capacity" {
+  description = "The desired count to launch"
+  type        = number
+  default = 2
+}
+
 variable "custom_tags" {
   description = "Custom tags to set on the Instances in the ASG"
   type        = map(string)

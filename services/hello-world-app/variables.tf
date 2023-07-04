@@ -68,6 +68,12 @@ variable "max_size" {
   type        = number
 }
 
+variable "desired_capacity" {
+  description = "The desired count to launch"
+  type        = number
+  default = 2
+}
+
 variable "enable_autoscaling" {
   description = "If set to true, enable auto scaling"
   type        = bool
@@ -82,9 +88,32 @@ variable "custom_tags" {
 variable "subnet_ids" {
   description = "The subnet IDs to deploy to"
   type        = list(string)
+  default = null
 }
 
 variable "vpc_id" {
   description = "The vpc ID to deploy to"
   type        = string
+  default = null
+}
+
+variable "mysql_config" {
+  description = "The config for the MySQL DB"
+  type = object({
+    address = string
+    port = number
+  })
+  default = null
+}
+
+variable "db_remote_state_bucket" {
+  description = "The name of the S3 bucket for the DB's Terraform state"
+  type = string
+  default = null
+}
+
+variable "db_remote_state_key" {
+  description = "The path in the S3 bucket for the DB's Terraform state"
+  type = string
+  default = null
 }
